@@ -1,0 +1,3 @@
+cs-server:
+  serverHostIp: localhost
+  serverHostPort: 8080
