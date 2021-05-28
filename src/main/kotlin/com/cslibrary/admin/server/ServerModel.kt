@@ -1,6 +1,7 @@
 package com.cslibrary.admin.server
 
 import com.cslibrary.admin.configuration.ServerConfiguration
+import com.cslibrary.admin.data.NotifyUserRequest
 import com.cslibrary.admin.data.ReportData
 import com.cslibrary.admin.data.SealedUser
 import org.springframework.http.HttpEntity
@@ -61,5 +62,13 @@ class ServerModel(
         }
 
         return serverHelper.getObjectValues(responseEntity.body!!)
+    }
+
+    // Add Notification to user
+    fun postNotificationToUser(notifyUserRequest: NotifyUserRequest) {
+        val url: String = "${serverConfiguration.serverFullUrl}/api/v1/admin/user/notification"
+        val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
+            restTemplate.exchange(url, HttpMethod.POST, HttpEntity<NotifyUserRequest>(notifyUserRequest, getHeader()))
+        }
     }
 }

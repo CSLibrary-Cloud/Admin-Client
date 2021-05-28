@@ -1,9 +1,6 @@
 package com.cslibrary.admin.server
 
-import com.cslibrary.admin.data.ReportData
-import com.cslibrary.admin.data.ReportRequest
-import com.cslibrary.admin.data.SealedUser
-import com.cslibrary.admin.data.UserState
+import com.cslibrary.admin.data.*
 import com.cslibrary.admin.error.ErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -247,6 +244,25 @@ internal class ServerModelTest {
         }.onSuccess {
             assertThat(it.isNotEmpty()).isEqualTo(true)
             assertThat(it[0].userId).isEqualTo("KangDroid")
+        }
+    }
+
+    @Test
+    fun is_postNotificationToUser_works_well() {
+        mockServer.expect(
+            ExpectedCount.min(1),
+            MockRestRequestMatchers.requestTo("$serverAddress/api/v1/admin/user/notification"),
+        )
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.POST))
+            .andRespond(
+                MockRestResponseCreators.withNoContent()
+            )
+
+        runCatching {
+            serverModel.postNotificationToUser(NotifyUserRequest("KangDroid", UserNotification("test", "Test")))
+        }.onFailure {
+            println(it.stackTraceToString())
+            fail("Something went wrong!")
         }
     }
 }
