@@ -43,4 +43,12 @@ class ServerModel(
 
         return serverHelper.getObjectValues(responseEntity.body!!)
     }
+
+    // Remove User Report[Dismiss]
+    fun removeUserReport(reportId: String) {
+        val url: String = "${serverConfiguration.serverFullUrl}/api/v1/admin/report/${reportId}"
+        val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
+            restTemplate.exchange(url, HttpMethod.DELETE, HttpEntity<Unit>(getHeader()))
+        }
+    }
 }

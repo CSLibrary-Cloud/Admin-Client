@@ -190,4 +190,24 @@ internal class ServerModelTest {
             }
         }
     }
+
+    @Test
+    fun is_removeUserReport_works_well() {
+        val testReportToken: String = "TestToken"
+        mockServer.expect(
+            ExpectedCount.min(1),
+            MockRestRequestMatchers.requestTo("$serverAddress/api/v1/admin/report/${testReportToken}"),
+        )
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.DELETE))
+            .andRespond(
+                MockRestResponseCreators.withNoContent()
+            )
+
+        runCatching {
+            serverModel.removeUserReport(testReportToken)
+        }.onFailure {
+            println(it.stackTraceToString())
+            fail("Something went wrong!")
+        }
+    }
 }
