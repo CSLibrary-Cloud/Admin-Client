@@ -2,6 +2,8 @@ package com.cslibrary.admin.server
 
 import com.cslibrary.admin.data.ReportData
 import com.cslibrary.admin.data.ReportRequest
+import com.cslibrary.admin.data.SealedUser
+import com.cslibrary.admin.data.UserState
 import com.cslibrary.admin.error.ErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -208,6 +210,43 @@ internal class ServerModelTest {
         }.onFailure {
             println(it.stackTraceToString())
             fail("Something went wrong!")
+        }
+    }
+
+    @Test
+    fun is_getSealedUserList_works_well() {
+        mockServer.expect(
+            ExpectedCount.min(1),
+            MockRestRequestMatchers.requestTo("$serverAddress/api/v1/admin/user"),
+        )
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+            .andRespond(
+                MockRestResponseCreators.withSuccess().body(
+                    objectMapper.writeValueAsString(
+                        listOf(
+                            SealedUser(
+                                userId = "KangDroid",
+                                userName = "KDR",
+                                userPhoneNumber = "XXX-~",
+                                leftTime = -1000,
+                                totalStudyTime = -1000,
+                                reservedSeatNumber = "10",
+                                userState = UserState.BREAK,
+                                userNonBanned = true
+                            )
+                        )
+                    )
+                )
+            )
+
+        runCatching {
+            serverModel.getSealedUserList()
+        }.onFailure {
+            println(it.stackTraceToString())
+            fail("Something went wrong!")
+        }.onSuccess {
+            assertThat(it.isNotEmpty()).isEqualTo(true)
+            assertThat(it[0].userId).isEqualTo("KangDroid")
         }
     }
 }

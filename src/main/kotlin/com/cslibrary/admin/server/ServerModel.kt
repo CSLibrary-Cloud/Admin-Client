@@ -2,6 +2,7 @@ package com.cslibrary.admin.server
 
 import com.cslibrary.admin.configuration.ServerConfiguration
 import com.cslibrary.admin.data.ReportData
+import com.cslibrary.admin.data.SealedUser
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -50,5 +51,15 @@ class ServerModel(
         val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
             restTemplate.exchange(url, HttpMethod.DELETE, HttpEntity<Unit>(getHeader()))
         }
+    }
+
+    // Get User List[Sealed]
+    fun getSealedUserList(): List<SealedUser> {
+        val url: String = "${serverConfiguration.serverFullUrl}/api/v1/admin/user"
+        val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
+            restTemplate.exchange(url, HttpMethod.GET, HttpEntity<Unit>(getHeader()))
+        }
+
+        return serverHelper.getObjectValues(responseEntity.body!!)
     }
 }
