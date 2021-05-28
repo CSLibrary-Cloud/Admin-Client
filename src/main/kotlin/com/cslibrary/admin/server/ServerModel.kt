@@ -1,6 +1,7 @@
 package com.cslibrary.admin.server
 
 import com.cslibrary.admin.configuration.ServerConfiguration
+import com.cslibrary.admin.data.ReportData
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -31,5 +32,15 @@ class ServerModel(
         val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
             restTemplate.exchange(uri.toUriString(), HttpMethod.POST, HttpEntity<Unit>(getHeader()))
         }
+    }
+
+    // Get User Report
+    fun getUserReportList(): List<ReportData> {
+        val url: String = "${serverConfiguration.serverFullUrl}/api/v1/admin/report"
+        val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
+            restTemplate.exchange(url, HttpMethod.GET, HttpEntity<Unit>(getHeader()))
+        }
+
+        return serverHelper.getObjectValues(responseEntity.body!!)
     }
 }

@@ -1,5 +1,7 @@
 package com.cslibrary.admin.server
 
+import com.cslibrary.admin.data.ReportData
+import com.cslibrary.admin.data.ReportRequest
 import com.cslibrary.admin.error.ErrorResponse
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -146,5 +148,46 @@ internal class ServerModelTest {
         }
 
         mockServer.verify()
+    }
+
+    @Test
+    fun is_gettingUserReportList_works_well() {
+        mockServer.expect(
+            ExpectedCount.min(1),
+            MockRestRequestMatchers.requestTo("$serverAddress/api/v1/admin/report"),
+        )
+            .andExpect(MockRestRequestMatchers.method(HttpMethod.GET))
+            .andRespond(
+                MockRestResponseCreators.withSuccess().body(
+                    objectMapper.writeValueAsString(
+                        listOf(
+                            ReportData(
+                                reportUserId = "KangDroid",
+                                reportContent = ReportRequest("ReportContent"),
+                                isReportHandlingDone = false,
+                                reportIdentifier = "SHA-512-somewhat"
+                            ),
+                            ReportData(
+                                reportUserId = "KangDroid",
+                                reportContent = ReportRequest("ReportContent"),
+                                isReportHandlingDone = false,
+                                reportIdentifier = "SHA-512-somewhat2"
+                            )
+                        )
+                    )
+                )
+            )
+
+        runCatching {
+            serverModel.getUserReportList()
+        }.onFailure {
+            println(it.stackTraceToString())
+            fail("Something went wrong!")
+        }.onSuccess {
+            assertThat(it.size).isEqualTo(2)
+            it.forEach { eachData ->
+                assertThat(eachData.reportUserId).isEqualTo("KangDroid")
+            }
+        }
     }
 }

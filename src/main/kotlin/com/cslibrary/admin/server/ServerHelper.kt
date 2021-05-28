@@ -15,7 +15,7 @@ import org.springframework.web.client.ResourceAccessException
 class ServerHelper {
 
     // Jackson Object Mapper
-    private val objectMapper: ObjectMapper = jacksonObjectMapper()
+    val objectMapper: ObjectMapper = jacksonObjectMapper()
 
     // getError
     private fun getErrorMessageFromCommunicationException(httpStatusCodeException: HttpStatusCodeException): String {
@@ -48,6 +48,14 @@ class ServerHelper {
                 else -> "Unknown Error Occurred. Call developer with below logs.\n ${it.stackTraceToString()}"
             }
             throw RuntimeException("Server Communication Failed: $errorMessage")
+        }
+    }
+
+    final inline fun <reified T> getObjectValues(body: String): T {
+        return runCatching {
+            objectMapper.readValue<T>(body)
+        }.getOrElse {
+            throw RuntimeException("Error when changing response body to object: ${it.stackTraceToString()}")
         }
     }
 }
