@@ -1,9 +1,7 @@
 package com.cslibrary.admin.server
 
 import com.cslibrary.admin.configuration.ServerConfiguration
-import com.cslibrary.admin.data.NotifyUserRequest
-import com.cslibrary.admin.data.ReportData
-import com.cslibrary.admin.data.SealedUser
+import com.cslibrary.admin.data.*
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -11,6 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.client.exchange
+import org.springframework.web.client.postForEntity
 import org.springframework.web.util.UriComponentsBuilder
 
 @Component
@@ -70,5 +69,16 @@ class ServerModel(
         val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
             restTemplate.exchange(url, HttpMethod.POST, HttpEntity<NotifyUserRequest>(notifyUserRequest, getHeader()))
         }
+    }
+
+    // Login
+    fun loginUser(loginRequest: LoginRequest) {
+        val url: String = "${serverConfiguration.serverFullUrl}/api/v1/login"
+        val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
+            restTemplate.postForEntity<String>(url, loginRequest)
+        }
+
+        adminToken = serverHelper.getObjectValues<LoginResponse>(responseEntity.body!!).userToken
+
     }
 }
