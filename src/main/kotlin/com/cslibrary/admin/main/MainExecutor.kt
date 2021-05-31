@@ -1,5 +1,6 @@
 package com.cslibrary.admin.main
 
+import com.cslibrary.admin.main.io.MainIO
 import org.springframework.stereotype.Component
 import java.util.*
 import javax.annotation.PostConstruct
@@ -28,6 +29,9 @@ class MainExecutor(
 ) {
     @PostConstruct
     fun initUI() {
+        // Init I/O
+        MainIO.initIO()
+
         var menuSelection: MainMenuEntry
         do {
             menuSelection = printMenu()
@@ -64,9 +68,9 @@ class MainExecutor(
         clearScreen()
         println("CS-Library Admin's Menu.")
         enumValues<MainMenuEntry>().forEach {
-            println(it.toString())
+            MainIO.printNormal(it.toString())
         }
-        print("\nInput Menu[Number]: ")
+        MainIO.printNormal("\nInput Menu[Number]: ", false)
 
         val rawInput: String = inputScanner.nextLine()
 
@@ -79,8 +83,7 @@ class MainExecutor(
         return runCatching {
             input.toInt()
         }.onFailure {
-            println("$input cannot be changed to number!")
-            println("Please check number you input.")
+            MainIO.printError("$input cannot be changed to number!\nPlease check number you input.")
         }.getOrNull()
     }
 
@@ -91,12 +94,12 @@ class MainExecutor(
             }
         }
 
-        println("Unknown number ${input + 1}.")
+        MainIO.printError("Unknown number ${input + 1}.")
         return MainMenuEntry.EXIT
     }
 
     private fun waitFor() {
-        print("Press Enter to continue..")
+        MainIO.printNormal("Press Enter to continue..", false)
         inputScanner.nextLine()
     }
 }

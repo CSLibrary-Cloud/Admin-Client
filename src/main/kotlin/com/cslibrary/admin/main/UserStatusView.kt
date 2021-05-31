@@ -1,5 +1,6 @@
 package com.cslibrary.admin.main
 
+import com.cslibrary.admin.main.io.MainIO
 import com.cslibrary.admin.server.ServerModel
 import org.springframework.stereotype.Component
 import java.util.*
@@ -7,7 +8,6 @@ import java.util.*
 @Component
 class UserStatusView(
     private val userInfoView: UserInfoView,
-    private val inputScanner: Scanner,
     private val serverModel: ServerModel
 ) {
     fun banUser() {
@@ -15,16 +15,19 @@ class UserStatusView(
         userInfoView.getUserList()
 
         // Input ID
-        println("Input User ID to ban: ")
-        val userId: String = inputScanner.nextLine()
+        val userId: String = MainIO.getInputNormal("Input User ID to ban: ")
 
         runCatching {
             serverModel.updateUser(userId, true)
         }.onFailure {
-            println("Error banning user.")
-            println("Reason: ${it.message}")
+            MainIO.printError(
+                """
+                    |Error banning user.
+                    |Reason: ${it.message}
+                """.trimMargin()
+            )
         }.onSuccess {
-            println("Successfully banned user: ${userId}.")
+            MainIO.printNormal("Successfully banned user: ${userId}.")
         }
     }
 }
