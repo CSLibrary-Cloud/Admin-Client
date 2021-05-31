@@ -1,6 +1,7 @@
 package com.cslibrary.admin.main
 
 import com.cslibrary.admin.main.io.MainIO
+import com.cslibrary.admin.main.io.MainIO.clearScreen
 import org.springframework.stereotype.Component
 import java.util.*
 import javax.annotation.PostConstruct
@@ -51,11 +52,6 @@ class MainExecutor(
 
             waitFor()
         } while (menuSelection != MainMenuEntry.EXIT)
-    }
-
-    private fun clearScreen() {
-        print("\u001B[H\u001B[2J")
-        System.out.flush()
     }
 
     private fun printMenu(): MainMenuEntry {
