@@ -31,7 +31,7 @@ class ServerModel(
             .path("/api/v1/admin/user/${userId}")
             .queryParam("ban", isBan)
         val responseEntity: ResponseEntity<String> = serverHelper.getResponseEntityInStringFormat {
-            restTemplate.exchange(uri.toUriString(), HttpMethod.POST, HttpEntity<Unit>(getHeader()))
+            restTemplate.exchange(uri.toUriString(), HttpMethod.PUT, HttpEntity<Unit>(getHeader()))
         }
     }
 
