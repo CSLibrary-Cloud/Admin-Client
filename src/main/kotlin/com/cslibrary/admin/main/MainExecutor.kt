@@ -26,7 +26,8 @@ class MainExecutor(
     private val loginView: LoginView,
     private val userInfoView: UserInfoView,
     private val userStatusView: UserStatusView,
-    private val userReportView: UserReportView
+    private val userReportView: UserReportView,
+    private val notifyView: NotifyView
 ) {
     @PostConstruct
     fun initUI() {
@@ -58,7 +59,10 @@ class MainExecutor(
                     clearScreen()
                     userReportView.enterReport()
                 }
-                MainMenuEntry.NOTIFY_USER -> {}
+                MainMenuEntry.NOTIFY_USER -> {
+                    clearScreen()
+                    notifyView.openNotifyMenu()
+                }
                 MainMenuEntry.EXIT -> continue
             }
 

@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component
 @Component
 class UserReportView(
     private val serverModel: ServerModel,
-    private val userStatusView: UserStatusView
+    private val userStatusView: UserStatusView,
+    private val notifyView: NotifyView
 ) {
     fun enterReport() {
         val userReportList: List<ReportData> = runCatching {
@@ -77,6 +78,7 @@ class UserReportView(
                     userStatusView.unbanUser()
                 }
                 "4" -> {
+                    notifyView.openNotifyWithoutPrintingUser()
                 }
                 "0" -> continue
                 else -> MainIO.printError("Wrong input: $input")
