@@ -37,32 +37,15 @@ class MainExecutor(
         var menuSelection: MainMenuEntry
         do {
             menuSelection = printMenu()
+            clearScreen()
 
             when (menuSelection) {
-                MainMenuEntry.LOGIN -> {
-                    clearScreen()
-                    loginView.login()
-                }
-                MainMenuEntry.USER_INFO -> {
-                    clearScreen()
-                    userInfoView.getUserList()
-                }
-                MainMenuEntry.BAN_USER -> {
-                    clearScreen()
-                    userStatusView.banUser()
-                }
-                MainMenuEntry.UNBAN_USER -> {
-                    clearScreen()
-                    userStatusView.unbanUser()
-                }
-                MainMenuEntry.USER_REPORT -> {
-                    clearScreen()
-                    userReportView.enterReport()
-                }
-                MainMenuEntry.NOTIFY_USER -> {
-                    clearScreen()
-                    notifyView.openNotifyMenu()
-                }
+                MainMenuEntry.LOGIN -> loginView.login()
+                MainMenuEntry.USER_INFO -> userInfoView.getUserList()
+                MainMenuEntry.BAN_USER -> userStatusView.banUser()
+                MainMenuEntry.UNBAN_USER -> userStatusView.unbanUser()
+                MainMenuEntry.USER_REPORT -> userReportView.enterReport()
+                MainMenuEntry.NOTIFY_USER -> notifyView.openNotifyMenu()
                 MainMenuEntry.EXIT -> continue
             }
 
