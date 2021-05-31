@@ -25,7 +25,8 @@ class MainExecutor(
     private val inputScanner: Scanner,
     private val loginView: LoginView,
     private val userInfoView: UserInfoView,
-    private val userStatusView: UserStatusView
+    private val userStatusView: UserStatusView,
+    private val userReportView: UserReportView
 ) {
     @PostConstruct
     fun initUI() {
@@ -53,7 +54,10 @@ class MainExecutor(
                     clearScreen()
                     userStatusView.unbanUser()
                 }
-                MainMenuEntry.USER_REPORT -> {}
+                MainMenuEntry.USER_REPORT -> {
+                    clearScreen()
+                    userReportView.enterReport()
+                }
                 MainMenuEntry.NOTIFY_USER -> {}
                 MainMenuEntry.EXIT -> continue
             }
