@@ -4,16 +4,25 @@ import java.io.Console
 import java.util.*
 
 object MainIO {
-    private const val resetColor: String = "\u001B[0m"
-    private const val redColor: String = "\u001B[31m"
-    private const val greenColor: String = "\u001B[32m"
+    private val resetColor: String
+        get() = if (isWindows) "" else "\u001B[0m"
+    private val redColor: String
+        get() = if (isWindows) "" else "\u001B[31m"
+    private val greenColor: String
+        get() = if (isWindows) "" else "\u001B[32m"
 
     // Input Type
     private var useConsole: Boolean = false
+    private var isWindows: Boolean = false
     private var console: Console? = System.console()
     private lateinit var scanner: Scanner
 
     fun initIO() {
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            println("Warning: This program does not fully support Windows OS. Color / Escape / Echo will be disabled.")
+            isWindows = true
+        }
+
         if (console == null) {
             printError(
                 """
