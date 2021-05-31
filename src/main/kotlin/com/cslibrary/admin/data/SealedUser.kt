@@ -13,4 +13,18 @@ data class SealedUser(
     var reservedSeatNumber: String,
     var userState: UserState,
     var userNonBanned: Boolean
-)
+) {
+    override fun toString(): String {
+        return """
+            Information for user: $userName
+            ID: $userId
+            Name: $userName
+            P.N: $userPhoneNumber
+            Left Time: $leftTime
+            Total Study Time: $totalStudyTime
+            Current Seat Number: $reservedSeatNumber
+            Current State: ${userState.name}
+            Is user NOT banned? : $userNonBanned
+        """.trimIndent()
+    }
+}
