@@ -49,7 +49,10 @@ class MainExecutor(
                     clearScreen()
                     userStatusView.banUser()
                 }
-                MainMenuEntry.UNBAN_USER -> {}
+                MainMenuEntry.UNBAN_USER -> {
+                    clearScreen()
+                    userStatusView.unbanUser()
+                }
                 MainMenuEntry.USER_REPORT -> {}
                 MainMenuEntry.NOTIFY_USER -> {}
                 MainMenuEntry.EXIT -> continue

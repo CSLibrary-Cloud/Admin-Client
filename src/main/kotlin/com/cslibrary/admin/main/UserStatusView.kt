@@ -30,4 +30,25 @@ class UserStatusView(
             MainIO.printNormal("Successfully banned user: ${userId}.")
         }
     }
+
+    fun unbanUser() {
+        // Show User first
+        userInfoView.getUserList()
+
+        // Input ID
+        val userId: String = MainIO.getInputNormal("Input User ID to unban: ")
+
+        runCatching {
+            serverModel.updateUser(userId, false)
+        }.onFailure {
+            MainIO.printError(
+                """
+                    |Error unbanning user.
+                    |Reason: ${it.message}
+                """.trimMargin()
+            )
+        }.onSuccess {
+            MainIO.printNormal("Successfully unbanned user: ${userId}.")
+        }
+    }
 }
